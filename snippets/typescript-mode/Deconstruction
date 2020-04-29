@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Deconstruction
+# uuid:
+# key: dcon
+# condition: t
+# --
+
+const { $1 } = $2;
