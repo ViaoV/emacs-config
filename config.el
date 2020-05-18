@@ -45,14 +45,17 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one-light)
 
 (require 'yasnippet)
 (yas-global-mode 1)
 
+(map! :leader :desc "Open Terminal" "ot" #'ansi-term)
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Nextcloud/org")
+(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/Root/bin/x86_64-darwin/"))
 
 (org-clock-persistence-insinuate)
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
@@ -86,9 +89,9 @@
         :with-sub-superscript nil
         )))
 
+(require 'ox-dnd)
+
 (setq jiralib-url "https://quikserve.atlassian.net")
-(defconst jiralib-token
-'("Cookie" . "cloud.session.token=eyJraWQiOiJzZXNzaW9uLXNlcnZpY2VcL3Nlc3Npb24tc2VydmljZSIsImFsZyI6IlJTMjU2In0.eyJhc3NvY2lhdGlvbnMiOltdLCJzdWIiOiI1NTcwNTg6NDAxMzFmM2QtZmEzMC00ZTYwLWIzYjQtNDMwNmZmZTU1NjFlIiwiZW1haWxEb21haW4iOiJxdWlrc2VydmUuY29tIiwiaW1wZXJzb25hdGlvbiI6W10sImNyZWF0ZWQiOjE1ODc5NDg1MjQsInJlZnJlc2hUaW1lb3V0IjoxNTg3OTQ5NzM0LCJ2ZXJpZmllZCI6dHJ1ZSwiaXNzIjoic2Vzc2lvbi1zZXJ2aWNlIiwic2Vzc2lvbklkIjoiNzI5Nzg3NjEtNjM2ZC00MzE1LWJlODYtODkwNGZiZDQ2MjgzIiwiYXVkIjoiYXRsYXNzaWFuIiwibmJmIjoxNTg3OTQ5MTM0LCJleHAiOjE1OTA1NDExMzQsImlhdCI6MTU4Nzk0OTEzNCwiZW1haWwiOiJqb2VAcXVpa3NlcnZlLmNvbSIsImp0aSI6IjcyOTc4NzYxLTYzNmQtNDMxNS1iZTg2LTg5MDRmYmQ0NjI4MyJ9.GjglclzUd9zd2WEltVwEcJ6mKXLa8Td94_KPNgrjbxbtqmZ5EoO3hRubiw_quMHRBikcx10VjQIrrRe-MtkIeFpr56QaUp3WheBRlPjuKakTt0YhIeOg8EU9_HwgEQdBPBHXC5bILwp5UCYQ-0Q4S1QEE2HiloF_tHEcNbnK-aTBNmiVcv0pznPx85FPhvNifvnP9NHgkMfjL_0XkYcvXUXIphJ0X8CIkKxnqE-2k8ootaTURnJVy04rj4FEYgOnvqCTi6-Jyl0rRccLnakIaCE9uKWsCnlfn7ywvptO2K0lZ_ELPmOOkSP-t9rCzniRJzj4_xn6RQ5bR5_umd3YpQ"))
 
 (add-hook 'elixir-mode-hook
         (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
@@ -101,5 +104,28 @@
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
 (add-hook 'before-save-hook 'tide-format-before-save)
+
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+
+
+(setq web-mode-markup-indent-offset 2)
+(setq web-mode-code-indent-offset 2)

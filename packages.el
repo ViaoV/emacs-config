@@ -48,6 +48,9 @@
 
 (package! org-journal)
 (package! ox-twbs)
+(package! ox-dnd)
+(package! ox-dnd
+  :recipe (:host github :repo "xeals/emacs-org-dnd"))
 (package! org-jira)
 (package! alchemist)
 (package! ob-http)

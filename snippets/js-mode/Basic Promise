@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Basic Promise
+# uuid:
+# key: promise
+# condition: t
+# --
+
+new Promise((resolve, reject) => {
+    $1
+});
